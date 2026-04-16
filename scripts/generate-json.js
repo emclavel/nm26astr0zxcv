@@ -8,7 +8,9 @@ if (!CSV_URL) {
   throw new Error("CSV_URL manquant");
 }
 
-const today = new Date();
+const today = new Date(
+  new Date().toLocaleString("en-US", { timeZone: "America/Toronto" })
+);
 const day = today.getDate();
 const year = today.getFullYear();
 const month = today
