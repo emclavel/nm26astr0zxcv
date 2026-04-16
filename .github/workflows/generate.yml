@@ -33,6 +33,6 @@ jobs:
         run: |
           git config user.name "nm26-astro-bot"
           git config user.email "astro@bot"
-          git add public/horoscope.json
+          git add horoscope.json
           git commit -m "Update daily horoscope JSON" || echo "No changes"
           git push
