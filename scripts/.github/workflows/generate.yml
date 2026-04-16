@@ -1,0 +1,33 @@
+name: Generate daily horoscope JSON
+
+on:
+  schedule:
+    - cron: "0 8 * * *" # 4h AM Québec (UTC-4)
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install csv-parse node-fetch
+
+      - name: Generate JSON
+        run: node scripts/generate-json.js
+        env:
+          CSV_URL: ${{ secrets.CSV_URL }}
+
+      - name: Commit and push JSON
+        run: |
+          git config user.name "nm26astro-bot"
+          git config user.email "astro@bot"
+          git add public/horoscope.json
+          git commit -m "Update horoscope JSON" || echo "No changes"
+          git push
