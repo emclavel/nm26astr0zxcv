@@ -1,5 +1,8 @@
 name: Generate daily horoscope JSON
 
+permissions:
+  contents: write
+
 on:
   schedule:
     - cron: "0 8 * * *" # 4h du matin heure du Québec
