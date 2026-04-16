@@ -122,11 +122,11 @@ const run = async () => {
     }
   };
 
-  fs.mkdirSync("public", { recursive: true });
-  fs.writeFileSync(
-    "public/horoscope.json",
-    JSON.stringify(json, null, 2)
-  );
+
+fs.writeFileSync(
+  "horoscope.json",
+  JSON.stringify(json, null, 2)
+);
 
   console.log("JSON généré avec succès");
 };
