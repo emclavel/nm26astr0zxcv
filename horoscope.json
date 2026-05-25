@@ -3,8 +3,8 @@
   "day_label": "lundi 25 mai 2026",
   "lune": "",
   "signes": {
-    "belier": "",
-    "taureau": "",
+    "belier": "test",
+    "taureau": "test 2",
     "gemeaux": "",
     "cancer": "",
     "lion": "",
