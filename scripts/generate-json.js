@@ -16,7 +16,9 @@ if (!CSV_URL) {
 const today = new Date(
   new Date().toLocaleString("en-US", { timeZone: "America/Toronto" })
 );
+
 const day = today.getDate();
+const month = today.getMonth() + 1; // ✅ 1 à 12
 
 /**
  * -------- HELPERS --------
@@ -55,10 +57,11 @@ const run = async () => {
     const row = records[i].map(normalize);
 
     const hasJour = row.includes("JOUR");
+    const hasMois = row.includes("MOIS"); // ✅ NOUVEAU
     const hasLune = row.includes("LUNE");
     const hasBelier = row.includes("BELIER");
 
-    if (hasJour && hasLune && hasBelier) {
+    if (hasJour && hasMois && hasLune && hasBelier) {
       headers = records[i];
       headerIndex = i;
       break;
@@ -79,13 +82,17 @@ const run = async () => {
    */
   const validRows = dataRows
     .map((r) => ({
+      mois: Number(r[col("MOIS")]), // ✅ NOUVEAU
       jour: Number(r[col("JOUR")]),
       row: r
     }))
-    .filter((r) => !isNaN(r.jour));
+    .filter((r) => !isNaN(r.jour) && !isNaN(r.mois));
 
+  /**
+   * 3. Sélectionner la bonne ligne (mois + jour)
+   */
   const selected = validRows
-    .filter((r) => r.jour <= day)
+    .filter((r) => r.mois === month && r.jour <= day)
     .sort((a, b) => b.jour - a.jour)[0];
 
   if (!selected) {
@@ -95,7 +102,7 @@ const run = async () => {
   const row = selected.row;
 
   /**
-   * 3. JSON final
+   * 4. JSON final
    */
   const json = {
     date: today.toISOString().split("T")[0],
@@ -122,11 +129,10 @@ const run = async () => {
     }
   };
 
-
-fs.writeFileSync(
-  "horoscope.json",
-  JSON.stringify(json, null, 2)
-);
+  fs.writeFileSync(
+    "horoscope.json",
+    JSON.stringify(json, null, 2)
+  );
 
   console.log("JSON généré avec succès");
 };
